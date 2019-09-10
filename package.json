@@ -34,10 +34,8 @@
   "license": "ISC",
   "dependencies": {
     "express": "^4.17.1",
-    "leaflet": "^1.5.1",
     "react": "^16.9.0",
     "react-dom": "^16.9.0",
-    "react-leaflet": "^2.4.0",
     "webpack": "^4.39.3"
   },
   "devDependencies": {
