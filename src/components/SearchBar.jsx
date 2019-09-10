@@ -1,27 +1,34 @@
 import React, { Component } from 'react';
-
-export class SearchBar extends Component {
+export class SearchBar extends ({ Component }) {
   constructor(props) {
     super(props);
-    this.state = {
-      queryInput: ''
-    };
+    this.autocompleteInput = React.createRef();
+    this.autocomplete = null;
+    this.handlePlaceChanged = this.handlePlaceChanged.bind(this);
+  }
+
+  componentDidMount() {
+    this.autocomplete = new google.maps.places.Autocomplete(
+      this.autocompleteInput.current,
+      { types: ['geocode'] }
+    );
+
+    this.autocomplete.addListener('place_changed', this.handlePlaceChanged);
+  }
+
+  handlePlaceChanged() {
+    const place = this.autocomplete.getPlace();
+    this.props.onPlaceLoaded(place);
   }
 
   render() {
     return (
-      <div className="search-bar">
-        <form>
-          <input
-            type="text"
-            id="city-query"
-            autoComplete="off"
-            placeholder="Search a city"
-          />
-
-          <input type="submit" value="Submit" />
-        </form>
-      </div>
+      <input
+        ref={this.autocompleteInput}
+        id="autocomplete"
+        placeholder="Enter your address"
+        type="text"
+      ></input>
     );
   }
 }
