@@ -1,5 +1,4 @@
 import React, { Component } from 'react';
-// import L from 'leaflet';
 import { Map as LeafletMap, TileLayer, Marker, Popup } from 'react-leaflet';
 
 const style = {
@@ -11,16 +10,29 @@ export default class Map extends Component {
   constructor() {
     super();
     this.state = {
-      lat: 51.505,
-      lng: -0.09,
+      lat: 40.712,
+      lng: -74.005,
       zoom: 13
     };
+  }
+
+  componentDidUpdate(prevProps) {
+    // compare old props to new props to check if different city was clicked, and if so,
+    // update state with new latitude and longitude, thus triggering rerender
+    if (
+      this.props.clickedLatLng.lat !== prevProps.clickedLatLng.lat &&
+      this.props.clickedLatLng.lng !== prevProps.clickedLatLng.lng
+    ) {
+      let newLat = this.props.clickedLatLng.lat;
+      let newLng = this.props.clickedLatLng.lng;
+      this.setState({ lat: newLat, lng: newLng });
+    }
   }
 
   render() {
     const position = [this.state.lat, this.state.lng];
     return (
-      <LeafletMap stype={style} center={position} zoom={this.state.zoom}>
+      <LeafletMap center={position} zoom={this.state.zoom}>
         <TileLayer
           attribution='&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
           url="https://{s}.tile.osm.org/{z}/{x}/{y}.png"
@@ -34,25 +46,3 @@ export default class Map extends Component {
     );
   }
 }
-
-// class Map extends React.Component {
-//   componentDidMount() {
-//     // create map
-//     this.map = L.map('map', {
-//       center: [49.8419, 24.0315],
-//       zoom: 16,
-//       layers: [
-//         L.tileLayer('http://{s}.tile.osm.org/{z}/{x}/{y}.png', {
-//           attribution:
-//             '&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
-//         })
-//       ]
-//     });
-//   }
-
-// render() {
-//   return <div id="map" style={style}></div>;
-// }
-// }
-
-// export default Map;
